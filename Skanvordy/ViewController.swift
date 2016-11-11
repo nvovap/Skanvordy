@@ -13,6 +13,8 @@ class ViewController: UIViewController {
     @IBOutlet weak var layoutHeight: NSLayoutConstraint!
     @IBOutlet weak var layoutWidth: NSLayoutConstraint!
     
+    @IBOutlet weak var currentView: StartCell!
+    @IBOutlet weak var text: UITextField!
     
     
     override func viewDidLoad() {
@@ -30,7 +32,43 @@ class ViewController: UIViewController {
         layoutHeight.constant = CGFloat(sender.value)
     }
 
+    @IBAction func editChange(_ sender: Any) {
+        currentView.text = text.text!
+    }
+ 
     
+    
+    @IBAction func changeType(_ sender: UISegmentedControl) {
+        switch sender.selectedSegmentIndex {
+        case 0:
+            currentView.typeArrow = .Norman
+        case 1:
+            currentView.typeArrow = .LeftRight
+        case 2:
+            currentView.typeArrow = .RightLeft
+        case 3:
+            currentView.typeArrow = .Arrow1
+        default:
+            currentView.typeArrow = .Norman
+        }
+    }
+    
+    @IBAction func changePlace(_ sender: UISegmentedControl) {
+        switch sender.selectedSegmentIndex {
+        case 0:
+            currentView.positionArrow = .Above
+        case 1:
+            currentView.positionArrow = .Below
+        case 2:
+            currentView.positionArrow = .Right
+        case 3:
+            currentView.positionArrow = .Left
+        default:
+            currentView.positionArrow = .None
+        }
+        
+       
+    }
         
 }
 
