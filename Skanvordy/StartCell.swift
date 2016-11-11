@@ -10,29 +10,42 @@ import UIKit
 
 class StartCell: UIView {
 
+    
+    enum PositionArrow {
+        case None
+        case Above
+        case Below
+        case Right
+        case Left
+    }
   
     
+    var positionArrow: PositionArrow = .Right
     
     
     override func draw(_ rect: CGRect) {
         
+        let context = UIGraphicsGetCurrentContext()!
         
-        drawArrow(rect, text: "A")
+        drawText(rect, text: "A", context: context)
         
+        if positionArrow != .None {
+            drawArrow(rect, context: context)
+        }
         
     }
     
-    
-    
-    func drawArrow(_ rect: CGRect, text: String) {
-        
-        
-        let context = UIGraphicsGetCurrentContext()!
-        
-        
+    func drawText(_ rect: CGRect, text: String, context: CGContext) {
         
         //// Text Drawing
         let textRect = CGRect(x: 0, y: 0, width: rect.width, height: rect.height)
+        
+        let textPath = UIBezierPath(rect: textRect)
+        UIColor.black.setStroke()
+        textPath.lineWidth = 2
+        textPath.stroke()
+        
+        
         let textStyle = NSMutableParagraphStyle()
         textStyle.alignment = .center
         let textFontAttributes = [NSFontAttributeName: UIFont.systemFont(ofSize: rect.height), NSForegroundColorAttributeName: UIColor.black, NSParagraphStyleAttributeName: textStyle]
@@ -43,21 +56,27 @@ class StartCell: UIView {
         text.draw(in: CGRect(x: textRect.minX, y: textRect.minY + (textRect.height - textTextHeight) / 2, width: textRect.width, height: textTextHeight), withAttributes: textFontAttributes)
         context.restoreGState()
         
-        let centerX: CGFloat = 0
-        //let centerY: CGFloat = 50
-        let Y: CGFloat = rect.height / 2
+    }
+    
+    func drawArrow(_ rect: CGRect, context: CGContext) {
         
-      
+        var centerX: CGFloat = rect.width / 2
+        var centerY: CGFloat = 0
+        var rotat: CGFloat = 0
         
-        let centerY: CGFloat = Y
-        let rotat: CGFloat = 90
+        
+        if positionArrow == .Left {
+            centerX = 0
+            centerY = rect.height / 2
+            rotat = 90
+        }
+    
+        
+        
+        
         let scaleX: CGFloat = rect.width  / 100
         let scaleY: CGFloat = rect.height / 100
         
-        //let scaleX: CGFloat = 1
-        //let scaleY: CGFloat = 1
-        
-       
         
         //// Bezier Drawing
         context.saveGState()
@@ -78,9 +97,9 @@ class StartCell: UIView {
         bezierPath.close()
       
         
-        UIColor.gray.setFill()
+        UIColor.black.setFill()
         bezierPath.fill()
-        UIColor.black.setStroke()
+        UIColor.white.setStroke()
         bezierPath.lineWidth = 1
         bezierPath.stroke()
         
