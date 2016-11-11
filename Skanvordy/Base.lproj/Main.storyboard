@@ -1,14 +1,19 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11134" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11542" systemVersion="16B2657" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11106"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="Skanvordy" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
@@ -16,11 +21,39 @@
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nBK-Ik-WNs" customClass="StartCell" customModule="Skanvordy" customModuleProvider="target">
+                                <rect key="frame" x="138" y="284" width="100" height="100"/>
+                                <color key="backgroundColor" red="0.72336632013320923" green="0.13431618703610748" blue="0.36196506228128017" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="100" id="A6b-ko-bm1"/>
+                                    <constraint firstAttribute="height" constant="100" id="BFh-86-ibf"/>
+                                </constraints>
+                            </view>
+                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="100" minValue="1" maxValue="500" translatesAutoresizingMaskIntoConstraints="NO" id="UNu-bz-VjF">
+                                <rect key="frame" x="14" y="39" width="347" height="31"/>
+                                <connections>
+                                    <action selector="chengeX:" destination="BYZ-38-t0r" eventType="valueChanged" id="OWA-sh-KfF"/>
+                                </connections>
+                            </slider>
+                        </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="leadingMargin" secondItem="UNu-bz-VjF" secondAttribute="leading" id="Qwf-hJ-nM9"/>
+                            <constraint firstItem="nBK-Ik-WNs" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="l7b-6p-Cen"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="UNu-bz-VjF" secondAttribute="trailing" id="phb-Z3-3Bk"/>
+                            <constraint firstItem="nBK-Ik-WNs" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="ssp-EU-Pea"/>
+                            <constraint firstItem="UNu-bz-VjF" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="19" id="w5J-VK-NCW"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="layoutHeight" destination="BFh-86-ibf" id="NEz-3D-RVE"/>
+                        <outlet property="layoutWidth" destination="A6b-ko-bm1" id="2eF-x6-Jtc"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="136.80000000000001" y="138.98050974512745"/>
         </scene>
     </scenes>
 </document>
