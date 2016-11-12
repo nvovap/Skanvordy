@@ -27,11 +27,16 @@ class StartCell: UIView {
     }
   
     
-    var positionArrow: PositionArrow = .Above {
+    var positionArrow: PositionArrow = .None {
         didSet {
             setNeedsDisplay()
         }
     }
+    
+    weak var nextCell: StartCell?
+    weak var lastCell: StartCell?
+    
+    var touschFirst: Bool = true
     
     var typeArrow: TypeArrow = .Norman {
         didSet {
@@ -46,6 +51,70 @@ class StartCell: UIView {
     }
     
     
+}
+
+extension StartCell {
+    
+    override var canBecomeFirstResponder: Bool {
+        get{
+            return true
+        }
+    }
+    
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        becomeFirstResponder()
+        touschFirst = true
+    }
+    
+}
+
+
+//MARK: - StartCell
+extension StartCell: UIKeyInput {
+    var hasText: Bool {
+        get{
+            return text.isEmpty
+        }
+    }
+    
+    func insertText(_ text: String) {
+        let upperText = text.uppercased()
+        
+        if !touschFirst {
+            resignFirstResponder()
+            
+            if let nextCell = nextCell {
+                nextCell.text = upperText
+                resignFirstResponder()
+                nextCell.becomeFirstResponder()
+                nextCell.setNeedsDisplay()
+            } else {
+                //Delegate for word "Ended tapping"
+            }
+        } else {
+            self.text = upperText
+            touschFirst = false
+            setNeedsDisplay()
+        }
+    }
+    
+    func deleteBackward() {
+        text = ""
+        setNeedsDisplay()
+        
+        if let lastCell = lastCell {
+            resignFirstResponder()
+            lastCell.becomeFirstResponder()
+            lastCell.touschFirst = true
+        }
+    }
+    
+    
+}
+
+//MARK: - Draw
+extension StartCell {
+    
     override func draw(_ rect: CGRect) {
         
         let context = UIGraphicsGetCurrentContext()!
@@ -59,7 +128,7 @@ class StartCell: UIView {
             case .RightLeft:
                 drawArrowRightLeft(rect, context: context)
             case .Arrow1:
-                 drawArrow1(rect, context: context)
+                drawArrow1(rect, context: context)
             default:
                 drawArrow(rect, context: context)
             }
@@ -75,10 +144,10 @@ class StartCell: UIView {
         //// Text Drawing
         let textRect = CGRect(x: 0, y: 0, width: rect.width, height: rect.height)
         
-//        let textPath = UIBezierPath(rect: textRect)
-//        UIColor.black.setStroke()
-//        textPath.lineWidth = 2
-//        textPath.stroke()
+        //        let textPath = UIBezierPath(rect: textRect)
+        //        UIColor.black.setStroke()
+        //        textPath.lineWidth = 2
+        //        textPath.stroke()
         
         
         let textStyle = NSMutableParagraphStyle()
@@ -96,6 +165,14 @@ class StartCell: UIView {
     func drawBorder(_ rect: CGRect, context: CGContext) {
         
         context.saveGState()
+        
+        
+        
+        //// Bezier Drawing
+        context.saveGState()
+        // context.scaleBy(x: scaleX, y: scaleY)
+        
+        
         let textRect = CGRect(x: 0, y: 0, width: rect.width, height: rect.height)
         
         let textPath = UIBezierPath(rect: textRect)
@@ -154,7 +231,7 @@ class StartCell: UIView {
         bezierPath.addLine(to: CGPoint(x: 6.67, y: 0))
         bezierPath.addLine(to: CGPoint(x: 5, y: 0))
         bezierPath.close()
-      
+        
         
         UIColor.black.setFill()
         bezierPath.fill()
@@ -250,7 +327,7 @@ class StartCell: UIView {
         
         let scaleX: CGFloat = rect.width  / 100
         let scaleY: CGFloat = rect.height / 100
-
+        
         
         context.saveGState()
         context.translateBy(x: (centerX), y: (centerY))
@@ -277,9 +354,9 @@ class StartCell: UIView {
         bezier5Path.stroke()
         
         context.restoreGState()
-    
+        
     }
-
+    
     func drawArrow1(_ rect: CGRect, context: CGContext) {
         
         var centerX: CGFloat = 0

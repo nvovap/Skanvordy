@@ -14,12 +14,17 @@ class ViewController: UIViewController {
     @IBOutlet weak var layoutWidth: NSLayoutConstraint!
     
     @IBOutlet weak var currentView: StartCell!
+    @IBOutlet weak var twoWord: StartCell!
     @IBOutlet weak var text: UITextField!
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        
+       // currentView.keyboardType = UIKeyboardType.default
+        
+        currentView.nextCell = twoWord
     }
 
     override func didReceiveMemoryWarning() {
