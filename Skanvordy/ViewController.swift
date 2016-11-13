@@ -24,7 +24,7 @@ class ViewController: UIViewController {
         
        // currentView.keyboardType = UIKeyboardType.default
         
-        currentView.nextCell = twoWord
+        //currentView.nextCell = twoWord
     }
 
     override func didReceiveMemoryWarning() {

@@ -8,6 +8,12 @@
 
 import UIKit
 
+protocol StartCellDelegate: class {
+    // The following command (ie, method) must be obeyed by any
+    // underling (ie, delegate) of the older sibling.
+    func touchMe(element: StartCell)
+}
+
 class StartCell: UIView {
 
     
@@ -26,6 +32,7 @@ class StartCell: UIView {
         case Arrow1
     }
   
+    weak var delegate:StartCellDelegate?
     
     var positionArrow: PositionArrow = .None {
         didSet {
@@ -39,16 +46,24 @@ class StartCell: UIView {
         }
     }
     
+    var highlight: Bool = false {
+        didSet {
+            setNeedsDisplay()
+        }
+    }
+    
     var guessed: Bool = false {
         didSet {
             setNeedsDisplay()
         }
     }
     
-    var selected: Bool = false
-    
-    weak var nextCell: StartCell?
-    weak var lastCell: StartCell?
+    var selected: Bool = false {
+        didSet {
+            setNeedsDisplay()
+        }
+    }
+
     
     var touschFirst: Bool = false
     
@@ -69,70 +84,74 @@ class StartCell: UIView {
 
 extension StartCell {
     
-    override var canBecomeFirstResponder: Bool {
-        get{
-            return true
-        }
-    }
+//    override var canBecomeFirstResponder: Bool {
+//        get{
+//            return true
+//        }
+//    }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        becomeFirstResponder()
-        touschFirst = true
-        selected = true
-        setNeedsDisplay()
+//        becomeFirstResponder()
+//        touschFirst = true
+//        selected = true
+//        setNeedsDisplay()
+        
+        if let delegate = self.delegate {
+            delegate.touchMe(element: self)
+        }
     }
     
 }
 
 
-//MARK: - StartCell
-extension StartCell: UIKeyInput {
-    var hasText: Bool {
-        get{
-            return text.isEmpty
-        }
-    }
-    
-    func insertText(_ text: String) {
-        let upperText = text.uppercased()
-        
-        if !touschFirst {
-            resignFirstResponder()
-            selected = false
-            
-            if let nextCell = nextCell {
-                nextCell.text = upperText
-                if nextCell.nextCell != nil {
-                    resignFirstResponder()
-                    nextCell.becomeFirstResponder()
-                    nextCell.selected = true
-                }
-                
-                nextCell.setNeedsDisplay()
-            } else {
-                //Delegate for word "Ended tapping"
-            }
-        } else {
-            self.text = upperText
-            touschFirst = false
-        }
-        
-        setNeedsDisplay()
-    }
-    
-    func deleteBackward() {
-        text = ""
-        setNeedsDisplay()
-        
-        if let lastCell = lastCell {
-            resignFirstResponder()
-            lastCell.becomeFirstResponder()
-            lastCell.touschFirst = true
-        }
-    }
-    
-    
-}
+//MARK: - UIKeyInput
+//extension StartCell: UIKeyInput {
+//    var hasText: Bool {
+//        get{
+//            return text.isEmpty
+//        }
+//    }
+//    
+//    func insertText(_ text: String) {
+//        let upperText = text.uppercased()
+//        
+//        if !touschFirst {
+//            resignFirstResponder()
+//            selected = false
+//            
+//            if let nextCell = nextCell {
+//                nextCell.text = upperText
+//                if nextCell.nextCell != nil {
+//                    resignFirstResponder()
+//                    nextCell.becomeFirstResponder()
+//                    nextCell.selected = true
+//                }
+//                
+//                nextCell.setNeedsDisplay()
+//            } else {
+//                //Delegate for word "Ended tapping"
+//            }
+//        } else {
+//            self.text = upperText
+//            touschFirst = false
+//        }
+//        
+//        setNeedsDisplay()
+//    }
+//    
+//    func deleteBackward() {
+//        text = ""
+//        setNeedsDisplay()
+//        
+//        if let lastCell = lastCell {
+//            resignFirstResponder()
+//            lastCell.becomeFirstResponder()
+//            lastCell.touschFirst = true
+//        }
+//    }
+//    
+//    
+//}
 
 //MARK: - Draw
 extension StartCell {
@@ -143,6 +162,9 @@ extension StartCell {
         
         drawBackground(rect, context: context)
         
+        if highlight {
+            drawHighlightd(rect, context: context)
+        }
         
         drawText(rect, text: text, context: context)
         
@@ -160,10 +182,37 @@ extension StartCell {
             
         }
         
+        
+        
         drawBorder(rect, context: context)
         
     }
     
+    
+    func drawHighlightd(_ rect: CGRect, context: CGContext)  {
+        
+        
+        
+        //// Color Declarations
+        var gradientColor = UIColor(red: 0, green: 0, blue: 0, alpha: 1.000)
+      
+        gradientColor = UIColor(red: 0.660, green: 0.667, blue: 0.368, alpha: 0.200)
+        
+        //// Gradient Declarations
+        let gradient = CGGradient(colorsSpace: nil, colors: [gradientColor.cgColor, UIColor.white.cgColor] as CFArray, locations: [0, 1])!
+        
+        let half = rect.height / 2
+        
+        //// Rectangle Drawing
+        let rectanglePath = UIBezierPath(rect:rect)
+        context.saveGState()
+        rectanglePath.addClip()
+        
+        
+        context.drawLinearGradient(gradient, start: CGPoint(x: half, y: 0), end: CGPoint(x: half, y: rect.height), options: [])
+        
+        context.restoreGState()
+    }
     
     func drawBackground(_ rect: CGRect, context: CGContext)  {
         
@@ -173,10 +222,10 @@ extension StartCell {
         var gradientColor = UIColor(red: 0, green: 0, blue: 0, alpha: 1.000)
         
         if selected {
-            gradientColor = UIColor(red: 0.570, green: 0.697, blue: 0.881, alpha: 1.000)
-        } else if first {
-                gradientColor =  UIColor(red: 1.000, green: 0.721, blue: 0.353, alpha: 1.000)
-        } else if guessed {
+            gradientColor = UIColor(red: 0.570, green: 0.897, blue: 0.881, alpha: 1.000)
+//        } else if first {
+//            gradientColor =  UIColor(red: 1.000, green: 0.721, blue: 0.353, alpha: 1.000)
+        }else if guessed {
             gradientColor = UIColor(red: 0.599, green: 0.881, blue: 0.570, alpha: 1.000)
         }
         
@@ -190,7 +239,7 @@ extension StartCell {
         context.saveGState()
         rectanglePath.addClip()
        
-        if selected || first || guessed {
+        if selected || guessed {
             context.drawLinearGradient(gradient, start: CGPoint(x: half, y: 0), end: CGPoint(x: half, y: rect.height), options: [])
         } else {
             UIColor.white.setFill()

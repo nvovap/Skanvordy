@@ -8,7 +8,7 @@
 
 import UIKit
 
-class Word: UIView {
+class Word: UIView, StartCellDelegate {
     
     enum Direction {
         case Down
@@ -17,7 +17,7 @@ class Word: UIView {
     
     var startCell: StartCell!
     
-    var correctText: String = ""
+    var correctText: String = "WAY"
         //{
 //        didSet {
 //            let length = correctText.lengthOfBytes(using: String.Encoding.utf8)
@@ -32,12 +32,21 @@ class Word: UIView {
  //   }
     
     
-    var currentText: String = ""
+    var currentText: String = "   "
+    var gussed: Bool = false
     
     
     var direction: Direction = .Right
     
     var startPosition: CGPoint = CGPoint(x: 0, y:0)
+    
+    var cells = [StartCell]()
+    
+    var currentCell: StartCell?
+    var currentIndex: Int = 0
+    
+    
+    
     
     
     override init(frame: CGRect) {
@@ -45,6 +54,41 @@ class Word: UIView {
         
         
        // build()
+    }
+    
+    func touchMe(element: StartCell) {
+        becomeFirstResponder()
+        
+        currentCell = element
+        
+        deselect()
+        
+        currentCell?.selected = true
+        
+        currentIndex = cells.index(of: element)!
+        
+        highlight(true)
+        
+        
+    }
+    
+    func highlight(_ value: Bool) {
+        for element in  cells {
+            element.highlight = value
+        }
+    }
+    
+    func gusses() {
+        gussed = true
+        for element in  cells {
+            element.guessed = true
+        }
+    }
+    
+    func deselect() {
+        for element in  cells {
+            element.selected = false
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -61,21 +105,31 @@ class Word: UIView {
         startCell.translatesAutoresizingMaskIntoConstraints = false
         startCell.first = true
         //startCell.backgroundColor = UIColor.blue
+        startCell.delegate = self
+        
         addSubview(startCell)
+        
+        cells.append(startCell)
         
         let twoCell = StartCell()
         twoCell.translatesAutoresizingMaskIntoConstraints = false
        // twoCell.backgroundColor = UIColor.white
-        startCell.nextCell = twoCell
-        twoCell.lastCell = startCell
+//        startCell.nextCell = twoCell
+//        twoCell.lastCell = startCell
+        twoCell.delegate = self
         addSubview(twoCell)
+        
+        cells.append(twoCell)
         
         let threeCell = StartCell()
         threeCell.translatesAutoresizingMaskIntoConstraints = false
        // threeCell.backgroundColor = UIColor.white
-        twoCell.nextCell = threeCell
-        threeCell.lastCell = twoCell
+//        twoCell.nextCell = threeCell
+//        threeCell.lastCell = twoCell
+        threeCell.delegate = self
         addSubview(threeCell)
+        
+        cells.append(threeCell)
         
         
         print(bounds.height)
@@ -116,11 +170,91 @@ class Word: UIView {
 //        addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|-[lbl]-|", options: nil, metrics: nil, views: views))
 //        label = lbl
     }
+
+}
+
+
+//MARK: - UIKeyInput
+extension Word: UIKeyInput {
+    override var canBecomeFirstResponder: Bool {
+        get{
+            return true
+        }
+    }
     
     
+    var hasText: Bool {
+        get{
+            return currentText.isEmpty
+        }
+    }
     
+    func insertText(_ text: String) {
+        let upperText = text.uppercased()
+
+       
+        if !currentCell!.guessed {
+            currentCell?.text = upperText
+        }
+        
+        let startIndex = currentText.index(currentText.startIndex, offsetBy: currentIndex)
+        let endIndex = currentText.index(startIndex, offsetBy: 1)
+        let r = Range(startIndex..<endIndex)
+        
+        currentText.replaceSubrange(r, with: currentCell!.text)
+        
+        
+        print(currentText)
+        
+        currentCell?.selected = false
+        
+        currentIndex += 1
+        
+        if currentIndex < cells.count {
+            currentCell = cells[currentIndex]
+            currentCell?.selected = true
+            
+        } else {
+            resignFirstResponder()
+            currentIndex = 0
+            highlight(false)
+            
+            if currentText == correctText {
+                gusses()
+            }
+            
+        }
+    }
     
-    
-    
+    func deleteBackward() {
+        if gussed {
+            resignFirstResponder()
+            currentIndex = 0
+            highlight(false)
+        }
+        
+        let startIndex = currentText.index(currentText.startIndex, offsetBy: currentIndex)
+        let endIndex = currentText.index(startIndex, offsetBy: 1)
+        let r = Range(startIndex..<endIndex)
+        
+        currentText.replaceSubrange(r, with: " ")
+        
+        currentCell?.text = ""
+        currentCell?.selected = false
+        
+        
+        currentIndex -= 1
+        
+        if currentIndex >= 0 {
+            currentCell = cells[currentIndex]
+            currentCell?.selected = true
+        } else {
+            resignFirstResponder()
+            currentIndex = 0
+            highlight(false)
+        }
+        
+    }
+
     
 }
