@@ -33,10 +33,24 @@ class StartCell: UIView {
         }
     }
     
+    var first: Bool = false {
+        didSet {
+            setNeedsDisplay()
+        }
+    }
+    
+    var guessed: Bool = false {
+        didSet {
+            setNeedsDisplay()
+        }
+    }
+    
+    var selected: Bool = false
+    
     weak var nextCell: StartCell?
     weak var lastCell: StartCell?
     
-    var touschFirst: Bool = true
+    var touschFirst: Bool = false
     
     var typeArrow: TypeArrow = .Norman {
         didSet {
@@ -64,6 +78,8 @@ extension StartCell {
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         becomeFirstResponder()
         touschFirst = true
+        selected = true
+        setNeedsDisplay()
     }
     
 }
@@ -82,11 +98,16 @@ extension StartCell: UIKeyInput {
         
         if !touschFirst {
             resignFirstResponder()
+            selected = false
             
             if let nextCell = nextCell {
                 nextCell.text = upperText
-                resignFirstResponder()
-                nextCell.becomeFirstResponder()
+                if nextCell.nextCell != nil {
+                    resignFirstResponder()
+                    nextCell.becomeFirstResponder()
+                    nextCell.selected = true
+                }
+                
                 nextCell.setNeedsDisplay()
             } else {
                 //Delegate for word "Ended tapping"
@@ -94,8 +115,9 @@ extension StartCell: UIKeyInput {
         } else {
             self.text = upperText
             touschFirst = false
-            setNeedsDisplay()
         }
+        
+        setNeedsDisplay()
     }
     
     func deleteBackward() {
@@ -119,6 +141,9 @@ extension StartCell {
         
         let context = UIGraphicsGetCurrentContext()!
         
+        drawBackground(rect, context: context)
+        
+        
         drawText(rect, text: text, context: context)
         
         if positionArrow != .None {
@@ -137,6 +162,41 @@ extension StartCell {
         
         drawBorder(rect, context: context)
         
+    }
+    
+    
+    func drawBackground(_ rect: CGRect, context: CGContext)  {
+        
+        
+        
+        //// Color Declarations
+        var gradientColor = UIColor(red: 0, green: 0, blue: 0, alpha: 1.000)
+        
+        if selected {
+            gradientColor = UIColor(red: 0.570, green: 0.697, blue: 0.881, alpha: 1.000)
+        } else if first {
+                gradientColor =  UIColor(red: 1.000, green: 0.721, blue: 0.353, alpha: 1.000)
+        } else if guessed {
+            gradientColor = UIColor(red: 0.599, green: 0.881, blue: 0.570, alpha: 1.000)
+        }
+        
+        //// Gradient Declarations
+        let gradient = CGGradient(colorsSpace: nil, colors: [gradientColor.cgColor, UIColor.white.cgColor] as CFArray, locations: [0, 1])!
+        
+        let half = rect.height / 2
+        
+        //// Rectangle Drawing
+        let rectanglePath = UIBezierPath(rect:rect)
+        context.saveGState()
+        rectanglePath.addClip()
+       
+        if selected || first || guessed {
+            context.drawLinearGradient(gradient, start: CGPoint(x: half, y: 0), end: CGPoint(x: half, y: rect.height), options: [])
+        } else {
+            UIColor.white.setFill()
+            rectanglePath.fill()
+        }
+        context.restoreGState()
     }
     
     func drawText(_ rect: CGRect, text: String, context: CGContext) {
@@ -177,7 +237,14 @@ extension StartCell {
         
         let textPath = UIBezierPath(rect: textRect)
         UIColor.black.setStroke()
-        textPath.lineWidth = 4
+        
+        if selected {
+            textPath.lineWidth = 4
+        } else {
+            textPath.lineWidth = 1
+        }
+        
+        
         textPath.stroke()
         
         context.restoreGState()

@@ -59,19 +59,20 @@ class Word: UIView {
         
         startCell = StartCell()
         startCell.translatesAutoresizingMaskIntoConstraints = false
-        startCell.backgroundColor = UIColor.blue
+        startCell.first = true
+        //startCell.backgroundColor = UIColor.blue
         addSubview(startCell)
         
         let twoCell = StartCell()
         twoCell.translatesAutoresizingMaskIntoConstraints = false
-        twoCell.backgroundColor = UIColor.white
+       // twoCell.backgroundColor = UIColor.white
         startCell.nextCell = twoCell
         twoCell.lastCell = startCell
         addSubview(twoCell)
         
         let threeCell = StartCell()
         threeCell.translatesAutoresizingMaskIntoConstraints = false
-        threeCell.backgroundColor = UIColor.white
+       // threeCell.backgroundColor = UIColor.white
         twoCell.nextCell = threeCell
         threeCell.lastCell = twoCell
         addSubview(threeCell)
