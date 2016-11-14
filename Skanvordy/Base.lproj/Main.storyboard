@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11542" systemVersion="16B2657" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11542" systemVersion="16B2555" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -54,19 +54,27 @@
                                 </connections>
                             </segmentedControl>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zAJ-yD-rGS" customClass="Word" customModule="Skanvordy" customModuleProvider="target">
-                                <rect key="frame" x="36" y="290" width="300" height="50"/>
+                                <rect key="frame" x="36" y="290" width="200" height="25"/>
                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="300" id="gLA-W2-Pry"/>
-                                    <constraint firstAttribute="height" constant="50" id="jgJ-Za-pnn"/>
+                                    <constraint firstAttribute="width" constant="200" id="gLA-W2-Pry"/>
+                                    <constraint firstAttribute="height" constant="25" id="jgJ-Za-pnn"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jg9-bL-aiL" customClass="Word" customModule="Skanvordy" customModuleProvider="target">
-                                <rect key="frame" x="86" y="240" width="50" height="300"/>
+                                <rect key="frame" x="61" y="240" width="25" height="75"/>
                                 <color key="backgroundColor" red="0.72336632010000002" green="0.134316187" blue="0.36196506229999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="50" id="Yne-x7-Vc4"/>
-                                    <constraint firstAttribute="height" constant="300" id="c1e-LM-ICo"/>
+                                    <constraint firstAttribute="width" constant="25" id="Yne-x7-Vc4"/>
+                                    <constraint firstAttribute="height" constant="75" id="c1e-LM-ICo"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4zC-7M-BlK" customClass="Word" customModule="Skanvordy" customModuleProvider="target">
+                                <rect key="frame" x="161" y="240" width="25" height="100"/>
+                                <color key="backgroundColor" red="1" green="0.5" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="25" id="36U-Pw-HXh"/>
+                                    <constraint firstAttribute="height" constant="100" id="ncC-Mx-Exl"/>
                                 </constraints>
                             </view>
                         </subviews>
@@ -75,11 +83,13 @@
                             <constraint firstItem="rCw-6e-r78" firstAttribute="trailing" secondItem="stx-mZ-dwy" secondAttribute="trailing" id="F7E-7c-rsJ"/>
                             <constraint firstItem="rCw-6e-r78" firstAttribute="trailing" secondItem="UNu-bz-VjF" secondAttribute="trailing" id="Fm7-Nc-Xqj"/>
                             <constraint firstItem="rCw-6e-r78" firstAttribute="top" secondItem="stx-mZ-dwy" secondAttribute="bottom" constant="26" id="JgE-8W-X34"/>
+                            <constraint firstItem="4zC-7M-BlK" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="145" id="Lc3-C8-8dU"/>
                             <constraint firstAttribute="leadingMargin" secondItem="UNu-bz-VjF" secondAttribute="leading" id="Qwf-hJ-nM9"/>
+                            <constraint firstItem="4zC-7M-BlK" firstAttribute="top" secondItem="rCw-6e-r78" secondAttribute="bottom" constant="50" id="VWZ-cH-yd1"/>
                             <constraint firstItem="zAJ-yD-rGS" firstAttribute="top" secondItem="rCw-6e-r78" secondAttribute="bottom" constant="100" id="aqu-GA-YWG"/>
                             <constraint firstItem="jg9-bL-aiL" firstAttribute="top" secondItem="rCw-6e-r78" secondAttribute="bottom" constant="50" id="fgV-jZ-jP7"/>
                             <constraint firstItem="zAJ-yD-rGS" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="20" id="iQO-xC-2vY"/>
-                            <constraint firstItem="jg9-bL-aiL" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="70" id="kZk-NN-fhf"/>
+                            <constraint firstItem="jg9-bL-aiL" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="45" id="kZk-NN-fhf"/>
                             <constraint firstAttribute="leadingMargin" secondItem="stx-mZ-dwy" secondAttribute="leading" id="lzC-Up-gET"/>
                             <constraint firstAttribute="trailingMargin" secondItem="UNu-bz-VjF" secondAttribute="trailing" id="phb-Z3-3Bk"/>
                             <constraint firstItem="stx-mZ-dwy" firstAttribute="top" secondItem="UNu-bz-VjF" secondAttribute="bottom" constant="39" id="qNk-Fd-pSo"/>
@@ -93,11 +103,12 @@
                         <outlet property="layoutWidth" destination="gLA-W2-Pry" id="PcF-ph-3t7"/>
                         <outlet property="word" destination="zAJ-yD-rGS" id="zCI-Ya-HCU"/>
                         <outlet property="word2" destination="jg9-bL-aiL" id="8fS-tR-5sg"/>
+                        <outlet property="word3" destination="4zC-7M-BlK" id="9NM-PT-s5E"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="136.80000000000001" y="138.98050974512745"/>
+            <point key="canvasLocation" x="-222" y="-16"/>
         </scene>
     </scenes>
 </document>

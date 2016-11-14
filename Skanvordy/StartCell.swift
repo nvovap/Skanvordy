@@ -12,6 +12,8 @@ protocol StartCellDelegate: class {
     // The following command (ie, method) must be obeyed by any
     // underling (ie, delegate) of the older sibling.
     func touchMe(element: StartCell)
+    
+    func gussesMe(element: StartCell)
 }
 
 class StartCell: UIView {
@@ -54,6 +56,9 @@ class StartCell: UIView {
     
     var guessed: Bool = false {
         didSet {
+            if let delegate = self.delegate {
+                delegate.gussesMe(element: self)
+            }
             setNeedsDisplay()
         }
     }

@@ -8,6 +8,26 @@
 
 import UIKit
 
+protocol WordDelegate: class {
+    // The following command (ie, method) must be obeyed by any
+    // underling (ie, delegate) of the older sibling.
+    func touchMe(element: Word)
+}
+
+class GeneralLetter {
+    weak var word: Word!
+    var indexLetter: Int
+    
+    
+    init(word: Word, indexLetter: Int) {
+        self.word = word
+        
+        print(self.word)
+        self.indexLetter = indexLetter
+    }
+    
+}
+
 class Word: UIView, StartCellDelegate {
     
     enum Direction {
@@ -15,6 +35,11 @@ class Word: UIView, StartCellDelegate {
         case Right
     }
     
+    var generalLetters = [Int: GeneralLetter]()
+    
+    var myGeneralLetters = [Int:Bool]()
+    
+     weak var delegate:WordDelegate?
     
         //{
 //        didSet {
@@ -54,15 +79,30 @@ class Word: UIView, StartCellDelegate {
     var currentCell: StartCell?
     var currentIndex: Int = 0
     
-    
-    
-    
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        
-        
-       // build()
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if let delegate = self.delegate {
+            delegate.touchMe(element: self)
+        }
+    }
+       
+   
+    func gussesMe(element: StartCell) {
+        for currentElement in generalLetters {
+            let currentGE = currentElement.value
+            
+            if element == currentGE.word.cells[currentGE.indexLetter] {
+                let currentIndex = currentElement.key
+
+                
+                let startIndex = currentText.index(currentText.startIndex, offsetBy: currentIndex)
+                let endIndex = currentText.index(startIndex, offsetBy: 1)
+                let r = Range(startIndex..<endIndex)
+                
+                currentText.replaceSubrange(r, with: element.text)
+                
+                print("Current text delegate \(currentText)")
+            }
+        }
     }
     
     func touchMe(element: StartCell) {
@@ -86,6 +126,14 @@ class Word: UIView, StartCellDelegate {
         }
     }
     
+    func deselectAndHighlight() {
+        for element in  cells {
+            element.highlight = false
+            element.selected = false
+        }
+    }
+    
+    
     func gusses() {
         gussed = true
         for element in  cells {
@@ -106,7 +154,6 @@ class Word: UIView, StartCellDelegate {
     }
     
     private func build() {
-        
         startCell = StartCell()
         startCell.translatesAutoresizingMaskIntoConstraints = false
         startCell.first = true
@@ -116,14 +163,14 @@ class Word: UIView, StartCellDelegate {
         var views = ["startCell": startCell!]
         cells.append(startCell)
         
+        var spaceSize = bounds.height
+        
         if direction == .Down {
-            NSLayoutConstraint.activate([startCell.heightAnchor.constraint(equalToConstant: bounds.width)])
-            NSLayoutConstraint.activate([startCell.widthAnchor.constraint(equalToConstant: bounds.width)])
-        } else {
-            NSLayoutConstraint.activate([startCell.heightAnchor.constraint(equalToConstant: bounds.height)])
-            NSLayoutConstraint.activate([startCell.widthAnchor.constraint(equalToConstant: bounds.height)])
+            spaceSize = bounds.width
         }
         
+        NSLayoutConstraint.activate([startCell.heightAnchor.constraint(equalToConstant: spaceSize)])
+        NSLayoutConstraint.activate([startCell.widthAnchor.constraint(equalToConstant: spaceSize)])
         
         
         
@@ -133,17 +180,34 @@ class Word: UIView, StartCellDelegate {
         
         
         for pref in 1..<countWords {
-            let tempCell = StartCell()
+            
+            
+            var tempCell: StartCell
+            
+            if let generalLetters = generalLetters[pref]  {
+               tempCell = generalLetters.word!.cells[generalLetters.indexLetter]
+            } else {
+              tempCell = StartCell()
+            }
+        
             tempCell.translatesAutoresizingMaskIntoConstraints = false
             tempCell.delegate = self
-            addSubview(tempCell)
             
-            let nameCell = "cell\(pref)"
-            views[nameCell] = tempCell
             cells.append(tempCell)
             
-            NSLayoutConstraint.activate([tempCell.heightAnchor.constraint(equalTo: startCell.heightAnchor, multiplier: 1)])
-            NSLayoutConstraint.activate([tempCell.widthAnchor.constraint(equalTo: startCell.widthAnchor, multiplier: 1)])
+            
+            
+            if myGeneralLetters[pref] == nil {
+                addSubview(tempCell)
+                
+                let nameCell = "cell\(pref)"
+                views[nameCell] = tempCell
+                
+                
+                NSLayoutConstraint.activate([tempCell.heightAnchor.constraint(equalTo: startCell.heightAnchor, multiplier: 1)])
+                NSLayoutConstraint.activate([tempCell.widthAnchor.constraint(equalTo: startCell.widthAnchor, multiplier: 1)])
+                
+            }
             
         }
         
@@ -163,6 +227,9 @@ class Word: UIView, StartCellDelegate {
         
         var endElement = ""
         
+        
+        var nextSpace: CGFloat = 0
+        
         for pref in 1..<countWords {
             
             let nameCell = "cell\(pref)"
@@ -171,9 +238,17 @@ class Word: UIView, StartCellDelegate {
                 endElement = "|"
             }
             
+            if myGeneralLetters[pref] != nil {
+               nextSpace = spaceSize
+               continue
+            } else {
+                layouts.append(NSLayoutConstraint.constraints(withVisualFormat: "\(nap1):[\(leftView)]-(\(nextSpace))-[\(nameCell)]\(endElement)", options: [], metrics: nil, views: views))
+                layouts.append(NSLayoutConstraint.constraints(withVisualFormat: "\(nap2):|[\(nameCell)]|", options: [], metrics: nil, views: views))
+                nextSpace = 0
+            }
             
-            layouts.append(NSLayoutConstraint.constraints(withVisualFormat: "\(nap1):[\(leftView)]-(0)-[\(nameCell)]\(endElement)", options: [], metrics: nil, views: views))
-            layouts.append(NSLayoutConstraint.constraints(withVisualFormat: "\(nap2):|[\(nameCell)]|", options: [], metrics: nil, views: views))
+//            layouts.append(NSLayoutConstraint.constraints(withVisualFormat: "\(nap1):[\(leftView)]-(0)-[\(nameCell)]\(endElement)", options: [], metrics: nil, views: views))
+//            layouts.append(NSLayoutConstraint.constraints(withVisualFormat: "\(nap2):|[\(nameCell)]|", options: [], metrics: nil, views: views))
             
             leftView = nameCell
             

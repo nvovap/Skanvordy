@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, WordDelegate {
 
   
     @IBOutlet weak var layoutHeight: NSLayoutConstraint!
@@ -17,7 +17,10 @@ class ViewController: UIViewController {
 
     @IBOutlet weak var word: Word!
     @IBOutlet weak var word2: Word!
+    @IBOutlet weak var word3: Word!
   
+    
+    var selectedWord: Word?
     
     
     override func viewDidLoad() {
@@ -28,9 +31,25 @@ class ViewController: UIViewController {
         
         //currentView.nextCell = twoWord
         
-        word.correctText = "СОБАКА"
+        word.myGeneralLetters[1] = true
+        word.myGeneralLetters[5] = true
+        word.correctText = "ТРОПИНКА"
+        word.delegate = self
+        
+        print(word)
+        
+        let generalLetter = GeneralLetter(word: word, indexLetter:1)
+        
+        
         word2.direction = .Down
-        word2.correctText = "СОБАКА"
+        word2.generalLetters[2] = generalLetter
+        word2.delegate = self
+        word2.correctText = "ВОР"
+        
+        word3.direction = .Down
+        word3.generalLetters[2] = GeneralLetter(word: word, indexLetter:5)
+        word3.delegate = self
+        word3.correctText = "КИНО"
         
     }
 
@@ -45,7 +64,18 @@ class ViewController: UIViewController {
     }
 
     
- 
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        print("it is view touch")
+    }
+    
+    
+    func touchMe(element: Word) {
+        if let selectedWord = selectedWord {
+            selectedWord.deselectAndHighlight()
+        }
+        
+        selectedWord = element
+    }
     
     
     @IBAction func changeType(_ sender: UISegmentedControl) {
