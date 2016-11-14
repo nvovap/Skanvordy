@@ -75,8 +75,12 @@ class StartCell: UIView {
     
     var text: String = "" {
         didSet {
+            if guessed {
+                text = oldValue
+            }
             setNeedsDisplay()
         }
+        
     }
     
     

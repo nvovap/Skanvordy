@@ -15,9 +15,7 @@ class Word: UIView, StartCellDelegate {
         case Right
     }
     
-    var startCell: StartCell!
     
-    var correctText: String = "WAY"
         //{
 //        didSet {
 //            let length = correctText.lengthOfBytes(using: String.Encoding.utf8)
@@ -32,7 +30,18 @@ class Word: UIView, StartCellDelegate {
  //   }
     
     
-    var currentText: String = "   "
+    
+    var startCell: StartCell!
+    var correctText: String = "" {
+        didSet {
+            for _ in 1...correctText.characters.count {
+                currentText += " "
+            }
+            build()
+        }
+    }
+    
+    var currentText: String = ""
     var gussed: Bool = false
     
     
@@ -66,10 +75,9 @@ class Word: UIView, StartCellDelegate {
         currentCell?.selected = true
         
         currentIndex = cells.index(of: element)!
-        
-        highlight(true)
-        
-        
+        if !gussed {
+            highlight(true)
+        }
     }
     
     func highlight(_ value: Bool) {
@@ -94,66 +102,105 @@ class Word: UIView, StartCellDelegate {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         
-         build()
+        
     }
     
     private func build() {
         
-       // let length = correctText.lengthOfBytes(using: String.Encoding.utf8)
-        
         startCell = StartCell()
         startCell.translatesAutoresizingMaskIntoConstraints = false
         startCell.first = true
-        //startCell.backgroundColor = UIColor.blue
         startCell.delegate = self
-        
         addSubview(startCell)
         
+        var views = ["startCell": startCell!]
         cells.append(startCell)
         
-        let twoCell = StartCell()
-        twoCell.translatesAutoresizingMaskIntoConstraints = false
-       // twoCell.backgroundColor = UIColor.white
-//        startCell.nextCell = twoCell
-//        twoCell.lastCell = startCell
-        twoCell.delegate = self
-        addSubview(twoCell)
-        
-        cells.append(twoCell)
-        
-        let threeCell = StartCell()
-        threeCell.translatesAutoresizingMaskIntoConstraints = false
-       // threeCell.backgroundColor = UIColor.white
-//        twoCell.nextCell = threeCell
-//        threeCell.lastCell = twoCell
-        threeCell.delegate = self
-        addSubview(threeCell)
-        
-        cells.append(threeCell)
+        if direction == .Down {
+            NSLayoutConstraint.activate([startCell.heightAnchor.constraint(equalToConstant: bounds.width)])
+            NSLayoutConstraint.activate([startCell.widthAnchor.constraint(equalToConstant: bounds.width)])
+        } else {
+            NSLayoutConstraint.activate([startCell.heightAnchor.constraint(equalToConstant: bounds.height)])
+            NSLayoutConstraint.activate([startCell.widthAnchor.constraint(equalToConstant: bounds.height)])
+        }
         
         
-        print(bounds.height)
-        
-        NSLayoutConstraint.activate([startCell.heightAnchor.constraint(equalToConstant: bounds.height)])
-        NSLayoutConstraint.activate([startCell.widthAnchor.constraint(equalToConstant: bounds.height)])
         
         
-        NSLayoutConstraint.activate([twoCell.heightAnchor.constraint(equalToConstant: bounds.height)])
-        NSLayoutConstraint.activate([twoCell.widthAnchor.constraint(equalToConstant: bounds.height)])
         
-        NSLayoutConstraint.activate([threeCell.heightAnchor.constraint(equalToConstant: bounds.height)])
-        NSLayoutConstraint.activate([threeCell.widthAnchor.constraint(equalToConstant: bounds.height)])
-        
-        let views = ["startCell": startCell, "twoCell": twoCell, "threeCell": threeCell]
+        let countWords = correctText.characters.count
         
         
-        NSLayoutConstraint.activate([NSLayoutConstraint.constraints(withVisualFormat: "H:|[startCell]", options: [], metrics: nil, views: views),
-                                     NSLayoutConstraint.constraints(withVisualFormat: "V:|[startCell]", options: [], metrics: nil, views: views),
-                                     NSLayoutConstraint.constraints(withVisualFormat: "V:|[twoCell]", options: [], metrics: nil, views: views),
-                                     NSLayoutConstraint.constraints(withVisualFormat: "H:[startCell]-(0)-[twoCell]", options: [], metrics: nil, views: views),
-                                     NSLayoutConstraint.constraints(withVisualFormat: "V:|[threeCell]", options: [], metrics: nil, views: views),
-                                     NSLayoutConstraint.constraints(withVisualFormat: "H:[twoCell]-(0)-[threeCell]|", options: [], metrics: nil, views: views)].flatMap{$0})
         
+        for pref in 1..<countWords {
+            let tempCell = StartCell()
+            tempCell.translatesAutoresizingMaskIntoConstraints = false
+            tempCell.delegate = self
+            addSubview(tempCell)
+            
+            let nameCell = "cell\(pref)"
+            views[nameCell] = tempCell
+            cells.append(tempCell)
+            
+            NSLayoutConstraint.activate([tempCell.heightAnchor.constraint(equalTo: startCell.heightAnchor, multiplier: 1)])
+            NSLayoutConstraint.activate([tempCell.widthAnchor.constraint(equalTo: startCell.widthAnchor, multiplier: 1)])
+            
+        }
+        
+        var nap1 = "H"
+        var nap2 = "V"
+        
+        if direction == .Down {
+            nap1 = "V"
+            nap2 = "H"
+        }
+        
+        var layouts = [NSLayoutConstraint.constraints(withVisualFormat: "\(nap1):|[startCell]", options: [], metrics: nil, views: views),
+                       NSLayoutConstraint.constraints(withVisualFormat: "\(nap2):|[startCell]|", options: [], metrics: nil, views: views)]
+      
+        var leftView = "startCell"
+
+        
+        var endElement = ""
+        
+        for pref in 1..<countWords {
+            
+            let nameCell = "cell\(pref)"
+            
+            if pref == countWords {
+                endElement = "|"
+            }
+            
+            
+            layouts.append(NSLayoutConstraint.constraints(withVisualFormat: "\(nap1):[\(leftView)]-(0)-[\(nameCell)]\(endElement)", options: [], metrics: nil, views: views))
+            layouts.append(NSLayoutConstraint.constraints(withVisualFormat: "\(nap2):|[\(nameCell)]|", options: [], metrics: nil, views: views))
+            
+            leftView = nameCell
+            
+            
+        }
+        
+        NSLayoutConstraint.activate(layouts.flatMap{$0})
+    
+    
+//        twoCell.addConstraint(NSLayoutConstraint(item: startCell, attribute: .height, relatedBy: .equal, toItem: twoCell, attribute: .height, multiplier: 1, constant: 0))
+//        twoCell.addConstraint(NSLayoutConstraint(item: startCell, attribute: .width, relatedBy: .equal, toItem: twoCell, attribute: .width, multiplier: 1, constant: 0))
+//        
+//        threeCell.addConstraint(NSLayoutConstraint(item: startCell, attribute: .height, relatedBy: .equal, toItem: threeCell, attribute: .height, multiplier: 1, constant: 0))
+//        threeCell.addConstraint(NSLayoutConstraint(item: startCell, attribute: .width, relatedBy: .equal, toItem: threeCell, attribute: .width, multiplier: 1, constant: 0))
+//        
+        
+        
+        
+        
+        
+//        NSLayoutConstraint.activate([NSLayoutConstraint.constraints(withVisualFormat: "H:|[startCell]", options: [], metrics: nil, views: views),
+//                                     NSLayoutConstraint.constraints(withVisualFormat: "V:|[startCell]|", options: [], metrics: nil, views: views),
+//                                     NSLayoutConstraint.constraints(withVisualFormat: "V:|[twoCell]", options: [], metrics: nil, views: views),
+//                                     NSLayoutConstraint.constraints(withVisualFormat: "H:[startCell]-(0)-[twoCell]", options: [], metrics: nil, views: views),
+//                                     NSLayoutConstraint.constraints(withVisualFormat: "V:|[threeCell]", options: [], metrics: nil, views: views),
+//                                     NSLayoutConstraint.constraints(withVisualFormat: "H:[twoCell]-(0)-[threeCell]|", options: [], metrics: nil, views: views)].flatMap{$0})
+//        
         
         
         
@@ -210,20 +257,25 @@ extension Word: UIKeyInput {
         
         currentIndex += 1
         
-        if currentIndex < cells.count {
-            currentCell = cells[currentIndex]
-            currentCell?.selected = true
-            
-        } else {
+        if currentText == correctText {
+            gusses()
             resignFirstResponder()
             currentIndex = 0
             highlight(false)
-            
-            if currentText == correctText {
-                gusses()
+        } else {
+            if currentIndex < cells.count {
+                currentCell = cells[currentIndex]
+                currentCell?.selected = true
+                
+            } else {
+                resignFirstResponder()
+                currentIndex = 0
+                highlight(false)
             }
-            
         }
+        
+        
+        
     }
     
     func deleteBackward() {

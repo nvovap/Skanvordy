@@ -10,12 +10,14 @@ import UIKit
 
 class ViewController: UIViewController {
 
+  
     @IBOutlet weak var layoutHeight: NSLayoutConstraint!
     @IBOutlet weak var layoutWidth: NSLayoutConstraint!
     
-    @IBOutlet weak var currentView: StartCell!
-    @IBOutlet weak var twoWord: StartCell!
-    @IBOutlet weak var text: UITextField!
+
+    @IBOutlet weak var word: Word!
+    @IBOutlet weak var word2: Word!
+  
     
     
     override func viewDidLoad() {
@@ -25,6 +27,11 @@ class ViewController: UIViewController {
        // currentView.keyboardType = UIKeyboardType.default
         
         //currentView.nextCell = twoWord
+        
+        word.correctText = "СОБАКА"
+        word2.direction = .Down
+        word2.correctText = "СОБАКА"
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -33,43 +40,41 @@ class ViewController: UIViewController {
     }
 
     @IBAction func chengeX(_ sender: UISlider) {
-        layoutWidth.constant = CGFloat(sender.value)
+        layoutWidth.constant = CGFloat(sender.value) * 3
         layoutHeight.constant = CGFloat(sender.value)
     }
 
-    @IBAction func editChange(_ sender: Any) {
-        currentView.text = text.text!
-    }
+    
  
     
     
     @IBAction func changeType(_ sender: UISegmentedControl) {
         switch sender.selectedSegmentIndex {
         case 0:
-            currentView.typeArrow = .Norman
+            word.startCell.typeArrow = .Norman
         case 1:
-            currentView.typeArrow = .LeftRight
+            word.startCell.typeArrow = .LeftRight
         case 2:
-            currentView.typeArrow = .RightLeft
+            word.startCell.typeArrow = .RightLeft
         case 3:
-            currentView.typeArrow = .Arrow1
+            word.startCell.typeArrow = .Arrow1
         default:
-            currentView.typeArrow = .Norman
+            word.startCell.typeArrow = .Norman
         }
     }
     
     @IBAction func changePlace(_ sender: UISegmentedControl) {
         switch sender.selectedSegmentIndex {
         case 0:
-            currentView.positionArrow = .Above
+            word.startCell.positionArrow = .Above
         case 1:
-            currentView.positionArrow = .Below
+            word.startCell.positionArrow = .Below
         case 2:
-            currentView.positionArrow = .Right
+            word.startCell.positionArrow = .Right
         case 3:
-            currentView.positionArrow = .Left
+            word.startCell.positionArrow = .Left
         default:
-            currentView.positionArrow = .None
+            word.startCell.positionArrow = .None
         }
         
        
