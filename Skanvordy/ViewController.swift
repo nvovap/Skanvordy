@@ -59,8 +59,8 @@ class ViewController: UIViewController, WordDelegate {
     }
 
     @IBAction func chengeX(_ sender: UISlider) {
-        layoutWidth.constant = CGFloat(sender.value) * 3
-        layoutHeight.constant = CGFloat(sender.value)
+        layoutWidth.constant  = 7*25*CGFloat(sender.value)
+        layoutHeight.constant = 25*CGFloat(sender.value)
     }
 
     

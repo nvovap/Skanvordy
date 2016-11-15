@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11542" systemVersion="16B2555" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11761" systemVersion="16B2657" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -22,79 +22,47 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="100" minValue="1" maxValue="500" translatesAutoresizingMaskIntoConstraints="NO" id="UNu-bz-VjF">
+                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minValue="0.20000000000000001" maxValue="4" translatesAutoresizingMaskIntoConstraints="NO" id="UNu-bz-VjF">
                                 <rect key="frame" x="14" y="39" width="347" height="31"/>
                                 <connections>
                                     <action selector="chengeX:" destination="BYZ-38-t0r" eventType="valueChanged" id="OWA-sh-KfF"/>
                                 </connections>
                             </slider>
-                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="stx-mZ-dwy">
-                                <rect key="frame" x="16" y="108" width="343" height="29"/>
-                                <segments>
-                                    <segment title="Above"/>
-                                    <segment title="Below"/>
-                                    <segment title="Right"/>
-                                    <segment title="Left"/>
-                                    <segment title="None"/>
-                                </segments>
-                                <connections>
-                                    <action selector="changePlace:" destination="BYZ-38-t0r" eventType="valueChanged" id="lwz-ye-3ZE"/>
-                                </connections>
-                            </segmentedControl>
-                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="rCw-6e-r78">
-                                <rect key="frame" x="16" y="162" width="343" height="29"/>
-                                <segments>
-                                    <segment title="Normal"/>
-                                    <segment title="Left Right"/>
-                                    <segment title="Right Left"/>
-                                    <segment title="Arrow1"/>
-                                </segments>
-                                <connections>
-                                    <action selector="changeType:" destination="BYZ-38-t0r" eventType="valueChanged" id="846-fw-uPl"/>
-                                </connections>
-                            </segmentedControl>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zAJ-yD-rGS" customClass="Word" customModule="Skanvordy" customModuleProvider="target">
-                                <rect key="frame" x="36" y="290" width="200" height="25"/>
+                                <rect key="frame" x="36" y="209" width="320" height="40"/>
                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="200" id="gLA-W2-Pry"/>
-                                    <constraint firstAttribute="height" constant="25" id="jgJ-Za-pnn"/>
+                                    <constraint firstAttribute="width" constant="320" id="gLA-W2-Pry"/>
+                                    <constraint firstAttribute="height" constant="40" id="jgJ-Za-pnn"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jg9-bL-aiL" customClass="Word" customModule="Skanvordy" customModuleProvider="target">
-                                <rect key="frame" x="61" y="240" width="25" height="75"/>
+                                <rect key="frame" x="76" y="129" width="40" height="120"/>
                                 <color key="backgroundColor" red="0.72336632010000002" green="0.134316187" blue="0.36196506229999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="25" id="Yne-x7-Vc4"/>
-                                    <constraint firstAttribute="height" constant="75" id="c1e-LM-ICo"/>
+                                    <constraint firstAttribute="width" constant="40" id="Yne-x7-Vc4"/>
+                                    <constraint firstAttribute="height" constant="120" id="c1e-LM-ICo"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4zC-7M-BlK" customClass="Word" customModule="Skanvordy" customModuleProvider="target">
-                                <rect key="frame" x="161" y="240" width="25" height="100"/>
+                                <rect key="frame" x="236" y="129" width="40" height="160"/>
                                 <color key="backgroundColor" red="1" green="0.5" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="25" id="36U-Pw-HXh"/>
-                                    <constraint firstAttribute="height" constant="100" id="ncC-Mx-Exl"/>
+                                    <constraint firstAttribute="width" constant="40" id="36U-Pw-HXh"/>
+                                    <constraint firstAttribute="height" constant="160" id="ncC-Mx-Exl"/>
                                 </constraints>
                             </view>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="rCw-6e-r78" firstAttribute="trailing" secondItem="stx-mZ-dwy" secondAttribute="trailing" id="F7E-7c-rsJ"/>
-                            <constraint firstItem="rCw-6e-r78" firstAttribute="trailing" secondItem="UNu-bz-VjF" secondAttribute="trailing" id="Fm7-Nc-Xqj"/>
-                            <constraint firstItem="rCw-6e-r78" firstAttribute="top" secondItem="stx-mZ-dwy" secondAttribute="bottom" constant="26" id="JgE-8W-X34"/>
-                            <constraint firstItem="4zC-7M-BlK" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="145" id="Lc3-C8-8dU"/>
+                            <constraint firstItem="4zC-7M-BlK" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="220" id="Lc3-C8-8dU"/>
                             <constraint firstAttribute="leadingMargin" secondItem="UNu-bz-VjF" secondAttribute="leading" id="Qwf-hJ-nM9"/>
-                            <constraint firstItem="4zC-7M-BlK" firstAttribute="top" secondItem="rCw-6e-r78" secondAttribute="bottom" constant="50" id="VWZ-cH-yd1"/>
-                            <constraint firstItem="zAJ-yD-rGS" firstAttribute="top" secondItem="rCw-6e-r78" secondAttribute="bottom" constant="100" id="aqu-GA-YWG"/>
-                            <constraint firstItem="jg9-bL-aiL" firstAttribute="top" secondItem="rCw-6e-r78" secondAttribute="bottom" constant="50" id="fgV-jZ-jP7"/>
+                            <constraint firstItem="zAJ-yD-rGS" firstAttribute="top" secondItem="UNu-bz-VjF" secondAttribute="bottom" constant="140" id="Z2n-QM-AdB"/>
                             <constraint firstItem="zAJ-yD-rGS" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="20" id="iQO-xC-2vY"/>
-                            <constraint firstItem="jg9-bL-aiL" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="45" id="kZk-NN-fhf"/>
-                            <constraint firstAttribute="leadingMargin" secondItem="stx-mZ-dwy" secondAttribute="leading" id="lzC-Up-gET"/>
+                            <constraint firstItem="jg9-bL-aiL" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="60" id="kZk-NN-fhf"/>
                             <constraint firstAttribute="trailingMargin" secondItem="UNu-bz-VjF" secondAttribute="trailing" id="phb-Z3-3Bk"/>
-                            <constraint firstItem="stx-mZ-dwy" firstAttribute="top" secondItem="UNu-bz-VjF" secondAttribute="bottom" constant="39" id="qNk-Fd-pSo"/>
-                            <constraint firstAttribute="leadingMargin" secondItem="rCw-6e-r78" secondAttribute="leading" id="t7f-zj-VTD"/>
-                            <constraint firstItem="rCw-6e-r78" firstAttribute="leading" secondItem="stx-mZ-dwy" secondAttribute="leading" id="uom-fa-4Bo"/>
+                            <constraint firstItem="4zC-7M-BlK" firstAttribute="top" secondItem="UNu-bz-VjF" secondAttribute="bottom" constant="60" id="qBR-Y6-Gh8"/>
+                            <constraint firstItem="jg9-bL-aiL" firstAttribute="top" secondItem="UNu-bz-VjF" secondAttribute="bottom" constant="60" id="t8n-wR-axH"/>
                             <constraint firstItem="UNu-bz-VjF" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="19" id="w5J-VK-NCW"/>
                         </constraints>
                     </view>

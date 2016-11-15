@@ -234,7 +234,7 @@ class Word: UIView, StartCellDelegate {
             
             let nameCell = "cell\(pref)"
             
-            if pref == countWords {
+            if pref == countWords-1 {
                 endElement = "|"
             }
             
